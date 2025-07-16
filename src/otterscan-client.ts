@@ -220,7 +220,20 @@ export class OtterscanClient {
      * @param options - Configuration options
      */
     constructor(rpcUrl: string, options: OtterscanClientOptions = {}) {
-        this.provider = new ethers.JsonRpcProvider(rpcUrl);
+        if (!rpcUrl || typeof rpcUrl !== 'string' || rpcUrl.trim() === '') {
+            throw new Error('Invalid RPC URL: URL cannot be empty');
+        }
+
+        // Validate URL format
+        try {
+            new URL(rpcUrl);
+        } catch (error) {
+            throw new Error(`Invalid RPC URL format: ${rpcUrl}`);
+        }
+
+        this.provider = new ethers.JsonRpcProvider(rpcUrl, undefined, {
+            staticNetwork: true // Prevent automatic network detection retries
+        });
         this.options = {
             timeout: options.timeout || 30000,
             retries: options.retries || 3,

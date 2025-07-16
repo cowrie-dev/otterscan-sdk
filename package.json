@@ -3,9 +3,16 @@
   "version": "1.0.0",
   "description": "A TypeScript SDK for the Otterscan API - enhanced blockchain explorer functionality",
   "type": "module",
-  "main": "dist/index.js",
+  "main": "dist/index.esm.js",
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.esm.js",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "files": [
     "dist",
     "src",
