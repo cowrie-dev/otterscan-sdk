@@ -2,6 +2,10 @@
 
 A TypeScript SDK for the Otterscan API, providing enhanced blockchain explorer functionality built on top of Erigon nodes.
 
+> **Note**: This SDK requires an Erigon full archive node with the `--ots` flag enabled to access the Otterscan API endpoints.
+
+For more information about Otterscan and its capabilities, visit the [official Otterscan documentation](https://docs.otterscan.io/).
+
 ## Features
 
 - 🔍 **Enhanced Transaction Tracing** - Get detailed internal operations and execution traces
@@ -30,6 +34,7 @@ pnpm add otterscan-sdk
 
 - Node.js 16 or higher
 - ethers.js v6+ (peer dependency)
+- Erigon full archive node with `--ots` flag enabled
 
 ## Quick Start
 
