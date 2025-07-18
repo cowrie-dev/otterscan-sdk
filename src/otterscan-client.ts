@@ -216,24 +216,29 @@ export class OtterscanClient {
     /**
      * Create a new Otterscan client
      *
-     * @param rpcUrl - The RPC URL of an Erigon node with Otterscan API enabled
+     * @param rpcUrlOrProvider - Either an RPC URL string or an ethers provider
      * @param options - Configuration options
      */
-    constructor(rpcUrl: string, options: OtterscanClientOptions = {}) {
-        if (!rpcUrl || typeof rpcUrl !== 'string' || rpcUrl.trim() === '') {
-            throw new Error('Invalid RPC URL: URL cannot be empty');
+    constructor(rpcUrlOrProvider: string | ethers.JsonRpcProvider, options: OtterscanClientOptions = {}) {
+        if (typeof rpcUrlOrProvider === 'string') {
+            // Handle string URL
+            if (!rpcUrlOrProvider || rpcUrlOrProvider.trim() === '') {
+                throw new Error('Invalid RPC URL: URL cannot be empty');
+            }
+
+            // Validate URL format
+            try {
+                new URL(rpcUrlOrProvider);
+            } catch (error) {
+                throw new Error(`Invalid RPC URL format: ${rpcUrlOrProvider}`);
+            }
+
+            this.provider = new ethers.JsonRpcProvider(rpcUrlOrProvider);
+        } else {
+            // Handle ethers provider
+            this.provider = rpcUrlOrProvider;
         }
 
-        // Validate URL format
-        try {
-            new URL(rpcUrl);
-        } catch (error) {
-            throw new Error(`Invalid RPC URL format: ${rpcUrl}`);
-        }
-
-        this.provider = new ethers.JsonRpcProvider(rpcUrl, undefined, {
-            staticNetwork: true // Prevent automatic network detection retries
-        });
         this.options = {
             timeout: options.timeout || 30000,
             retries: options.retries || 3,
